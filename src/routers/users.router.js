@@ -28,14 +28,18 @@ const userController = require('../controllers/users.controller')
 
 // IMPOR/AMBIL DATA MENGGUNAKAN get DARI VARIABEL userControllers
 userRouter.get('/', userController.getAllusers)
+
+// IMPOR/AMBIL id DATA MENGGUNAKAN get DARI VARIABEL userControllers
+userRouter.get('/:id', userController.getDetailUser)
+
 // INSERT/MENGIRIM DATA/DATA USER BARU
 userRouter.post('/', userController.createUsers)
 
 // MERUBAH DATA SEBAGIAN
-userRouter.patch('/', userController.repairUsers)
+userRouter.patch('/:id', userController.updateUsers)
 
 //MEGHAPUS DATA
-userRouter.delete('/', userController.deleteUsers)
+userRouter.delete('/:id', userController.deleteUsers)
 
 
 module.exports = userRouter
