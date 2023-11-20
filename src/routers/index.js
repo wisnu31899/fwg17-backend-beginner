@@ -22,10 +22,10 @@ router.use('/productCategories', require('./productCategories.router'))
 
 router.use('/promo', require('./promo.router'))
 
-// router.use('/orders', require('./orders.router'))
+router.use('/orders', require('./orders.router'))
 
-// router.use('/orderDetails', require('./orderDetails.router'))
+router.use('/orderDetails', require('./orderDetails.router'))
 
-// router.use('/message', require('./message.router'))
+router.use('/message', require('./message.router'))
 
 module.exports = router
