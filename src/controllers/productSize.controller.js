@@ -1,50 +1,38 @@
-// let users = [
-//     {
-//         id: 1,
-//         name: 'wisnu'
-//     }, {
-//         id: 2,
-//         name: 'gab'
-//     }
-// ]
+let productsizeModel = require('../models/productSize.model')
 
-// let countUser = users.length
-
-let userModel = require('../models/users.model')
-
-exports.getAllUsers = async (req, res) => {
-    const users = await userModel.findAll()
+exports.getAllProductSize = async (req, res) => {
+    const productSize = await productsizeModel.findAll()
     return res.json({
         success: true,
-        message: 'list all users',
-        result: users
+        message: 'list all productSize',
+        result: productSize
     })
 }
 
-exports.getDetailUser = async (req, res) => {
+exports.getDetailProductSize = async (req, res) => {
     const id = parseInt(req.params.id)
-    const user = await userModel.findOne(id)
-    if (!user[0]) {
+    const productSize = await productsizeModel.findOne(id)
+    if (!productSize[0]) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'productSize not found'
         })
     }
     return res.json({
         success: true,
-        message: 'detail user',
-        result: user[0]
+        message: 'detail productSize',
+        result: productSize[0]
     })
 }
 
-exports.createUsers = async (req, res) => {
+exports.createProductSize = async (req, res) => {
     const data = req.body
     try {
-        const user = await userModel.create(data)
+        const productSize = await productsizeModel.create(data)
         return res.json({
             success: true,
-            message: 'create user success',
-            result: user[0]
+            message: 'create productSize success',
+            result: productSize[0]
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -61,37 +49,37 @@ exports.createUsers = async (req, res) => {
     }
 }
 
-exports.updateUsers = async (req, res) => {
+exports.updateProductSize = async (req, res) => {
     const id = parseInt(req.params.id)
     const data = req.body
     try {
-        const user = await userModel.update(data, id)
+        const productSize = await productsizeModel.update(data, id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: productSize[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'productSize not found'
         })
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deleteProductSize = async (req, res) => {
     const id = parseInt(req.params.id)
     try {
-        const user = await userModel.delete(id)
+        const productSize = await productsizeModel.delete(id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: productSize[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'productSize not found (update or delete on table "productSize" violates foreign key constraint "orderDetails_productSizeId_fkey" on table "orderDetails")'
         })
     }
 }

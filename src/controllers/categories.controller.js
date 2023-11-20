@@ -1,50 +1,38 @@
-// let users = [
-//     {
-//         id: 1,
-//         name: 'wisnu'
-//     }, {
-//         id: 2,
-//         name: 'gab'
-//     }
-// ]
+let categoriesModel = require('../models/categories.model')
 
-// let countUser = users.length
-
-let userModel = require('../models/users.model')
-
-exports.getAllUsers = async (req, res) => {
-    const users = await userModel.findAll()
+exports.getAllCategories = async (req, res) => {
+    const categories = await categoriesModel.findAll()
     return res.json({
         success: true,
-        message: 'list all users',
-        result: users
+        message: 'list all categories',
+        result: categories
     })
 }
 
-exports.getDetailUser = async (req, res) => {
+exports.getDetailCategories = async (req, res) => {
     const id = parseInt(req.params.id)
-    const user = await userModel.findOne(id)
-    if (!user[0]) {
+    const categories = await categoriesModel.findOne(id)
+    if (!categories[0]) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'categories not found'
         })
     }
     return res.json({
         success: true,
-        message: 'detail user',
-        result: user[0]
+        message: 'detail categories',
+        result: categories[0]
     })
 }
 
-exports.createUsers = async (req, res) => {
+exports.createCategories = async (req, res) => {
     const data = req.body
     try {
-        const user = await userModel.create(data)
+        const categories = await categoriesModel.create(data)
         return res.json({
             success: true,
-            message: 'create user success',
-            result: user[0]
+            message: 'create categories success',
+            result: categories[0]
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -61,37 +49,37 @@ exports.createUsers = async (req, res) => {
     }
 }
 
-exports.updateUsers = async (req, res) => {
+exports.updateCategories = async (req, res) => {
     const id = parseInt(req.params.id)
     const data = req.body
     try {
-        const user = await userModel.update(data, id)
+        const categories = await categoriesModel.update(data, id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: categories[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'categories not found'
         })
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deleteCategories = async (req, res) => {
     const id = parseInt(req.params.id)
     try {
-        const user = await userModel.delete(id)
+        const categories = await categoriesModel.delete(id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: categories[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'categories not found (update or delete on table "categories" violates foreign key constraint "orderDetails_categoriesId_fkey" on table "orderDetails")'
         })
     }
 }

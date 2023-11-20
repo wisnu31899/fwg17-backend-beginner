@@ -1,50 +1,38 @@
-// let users = [
-//     {
-//         id: 1,
-//         name: 'wisnu'
-//     }, {
-//         id: 2,
-//         name: 'gab'
-//     }
-// ]
+let productModel = require('../models/products.model')
 
-// let countUser = users.length
-
-let userModel = require('../models/users.model')
-
-exports.getAllUsers = async (req, res) => {
-    const users = await userModel.findAll()
+exports.getAllProducts = async (req, res) => {
+    const products = await productModel.findAll()
     return res.json({
         success: true,
-        message: 'list all users',
-        result: users
+        message: 'list all products',
+        result: products
     })
 }
 
-exports.getDetailUser = async (req, res) => {
+exports.getDetailProduct = async (req, res) => {
     const id = parseInt(req.params.id)
-    const user = await userModel.findOne(id)
-    if (!user[0]) {
+    const product = await productModel.findOne(id)
+    if (!product[0]) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'product not found'
         })
     }
     return res.json({
         success: true,
-        message: 'detail user',
-        result: user[0]
+        message: 'detail product',
+        result: product[0]
     })
 }
 
-exports.createUsers = async (req, res) => {
+exports.createProducts = async (req, res) => {
     const data = req.body
     try {
-        const user = await userModel.create(data)
+        const product = await productModel.create(data)
         return res.json({
             success: true,
-            message: 'create user success',
-            result: user[0]
+            message: 'create product success',
+            result: product[0]
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -61,37 +49,37 @@ exports.createUsers = async (req, res) => {
     }
 }
 
-exports.updateUsers = async (req, res) => {
+exports.updateProducts = async (req, res) => {
     const id = parseInt(req.params.id)
     const data = req.body
     try {
-        const user = await userModel.update(data, id)
+        const product = await productModel.update(data, id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: product[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'product not found'
         })
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deleteProducts = async (req, res) => {
     const id = parseInt(req.params.id)
     try {
-        const user = await userModel.delete(id)
+        const product = await productModel.delete(id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: product[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'product not found'
         })
     }
 }

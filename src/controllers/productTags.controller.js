@@ -1,50 +1,38 @@
-// let users = [
-//     {
-//         id: 1,
-//         name: 'wisnu'
-//     }, {
-//         id: 2,
-//         name: 'gab'
-//     }
-// ]
+let producttagsModel = require('../models/productTags.model')
 
-// let countUser = users.length
-
-let userModel = require('../models/users.model')
-
-exports.getAllUsers = async (req, res) => {
-    const users = await userModel.findAll()
+exports.getAllProductTags = async (req, res) => {
+    const productTags = await producttagsModel.findAll()
     return res.json({
         success: true,
-        message: 'list all users',
-        result: users
+        message: 'list all producttags',
+        result: productTags
     })
 }
 
-exports.getDetailUser = async (req, res) => {
+exports.getDetailProductTags = async (req, res) => {
     const id = parseInt(req.params.id)
-    const user = await userModel.findOne(id)
-    if (!user[0]) {
+    const productTags = await producttagsModel.findOne(id)
+    if (!producttags[0]) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'producttags not found'
         })
     }
     return res.json({
         success: true,
-        message: 'detail user',
-        result: user[0]
+        message: 'detail producttags',
+        result: productTags[0]
     })
 }
 
-exports.createUsers = async (req, res) => {
+exports.createProductTags = async (req, res) => {
     const data = req.body
     try {
-        const user = await userModel.create(data)
+        const productTags = await producttagsModel.create(data)
         return res.json({
             success: true,
-            message: 'create user success',
-            result: user[0]
+            message: 'create producttags success',
+            result: productTags[0]
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -61,37 +49,37 @@ exports.createUsers = async (req, res) => {
     }
 }
 
-exports.updateUsers = async (req, res) => {
+exports.updateProductTags = async (req, res) => {
     const id = parseInt(req.params.id)
     const data = req.body
     try {
-        const user = await userModel.update(data, id)
+        const productTags = await producttagsModel.update(data, id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: productTags[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'producttags not found'
         })
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deleteProductTags = async (req, res) => {
     const id = parseInt(req.params.id)
     try {
-        const user = await userModel.delete(id)
+        const productTags = await producttagsModel.delete(id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: productTags[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'producttags not found (update or delete on table "producttags" violates foreign key constraint "orderDetails_producttagsId_fkey" on table "orderDetails")'
         })
     }
 }

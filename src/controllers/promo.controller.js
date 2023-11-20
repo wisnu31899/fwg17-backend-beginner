@@ -1,50 +1,38 @@
-// let users = [
-//     {
-//         id: 1,
-//         name: 'wisnu'
-//     }, {
-//         id: 2,
-//         name: 'gab'
-//     }
-// ]
+let promoModel = require('../models/promo.model')
 
-// let countUser = users.length
-
-let userModel = require('../models/users.model')
-
-exports.getAllUsers = async (req, res) => {
-    const users = await userModel.findAll()
+exports.getAllPromo = async (req, res) => {
+    const promo = await promoModel.findAll()
     return res.json({
         success: true,
-        message: 'list all users',
-        result: users
+        message: 'list all promo',
+        result: promo
     })
 }
 
-exports.getDetailUser = async (req, res) => {
+exports.getDetailPromo = async (req, res) => {
     const id = parseInt(req.params.id)
-    const user = await userModel.findOne(id)
-    if (!user[0]) {
+    const promo = await promoModel.findOne(id)
+    if (!promo[0]) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'promo not found'
         })
     }
     return res.json({
         success: true,
-        message: 'detail user',
-        result: user[0]
+        message: 'detail promo',
+        result: promo[0]
     })
 }
 
-exports.createUsers = async (req, res) => {
+exports.createPromo = async (req, res) => {
     const data = req.body
     try {
-        const user = await userModel.create(data)
+        const promo = await promoModel.create(data)
         return res.json({
             success: true,
-            message: 'create user success',
-            result: user[0]
+            message: 'create promo success',
+            result: promo[0]
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -61,37 +49,37 @@ exports.createUsers = async (req, res) => {
     }
 }
 
-exports.updateUsers = async (req, res) => {
+exports.updatePromo = async (req, res) => {
     const id = parseInt(req.params.id)
     const data = req.body
     try {
-        const user = await userModel.update(data, id)
+        const promo = await promoModel.update(data, id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: promo[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'promo not found'
         })
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deletePromo = async (req, res) => {
     const id = parseInt(req.params.id)
     try {
-        const user = await userModel.delete(id)
+        const promo = await promoModel.delete(id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: promo[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'promo not found (update or delete on table "promo" violates foreign key constraint "orderDetails_promoId_fkey" on table "orderDetails")'
         })
     }
 }

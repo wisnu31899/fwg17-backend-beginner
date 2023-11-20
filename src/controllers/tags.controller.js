@@ -1,50 +1,38 @@
-// let users = [
-//     {
-//         id: 1,
-//         name: 'wisnu'
-//     }, {
-//         id: 2,
-//         name: 'gab'
-//     }
-// ]
+let tagsModel = require('../models/tags.model')
 
-// let countUser = users.length
-
-let userModel = require('../models/users.model')
-
-exports.getAllUsers = async (req, res) => {
-    const users = await userModel.findAll()
+exports.getAllTags = async (req, res) => {
+    const tags = await tagsModel.findAll()
     return res.json({
         success: true,
-        message: 'list all users',
-        result: users
+        message: 'list all tags',
+        result: tags
     })
 }
 
-exports.getDetailUser = async (req, res) => {
+exports.getDetailTags = async (req, res) => {
     const id = parseInt(req.params.id)
-    const user = await userModel.findOne(id)
-    if (!user[0]) {
+    const tags = await tagsModel.findOne(id)
+    if (!tags[0]) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'tags not found'
         })
     }
     return res.json({
         success: true,
-        message: 'detail user',
-        result: user[0]
+        message: 'detail tags',
+        result: tags[0]
     })
 }
 
-exports.createUsers = async (req, res) => {
+exports.createTags = async (req, res) => {
     const data = req.body
     try {
-        const user = await userModel.create(data)
+        const tags = await tagsModel.create(data)
         return res.json({
             success: true,
-            message: 'create user success',
-            result: user[0]
+            message: 'create tags success',
+            result: tags[0]
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -61,37 +49,37 @@ exports.createUsers = async (req, res) => {
     }
 }
 
-exports.updateUsers = async (req, res) => {
+exports.updateTags = async (req, res) => {
     const id = parseInt(req.params.id)
     const data = req.body
     try {
-        const user = await userModel.update(data, id)
+        const tags = await tagsModel.update(data, id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: tags[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'tags not found'
         })
     }
 }
 
-exports.deleteUsers = async (req, res) => {
+exports.deleteTags = async (req, res) => {
     const id = parseInt(req.params.id)
     try {
-        const user = await userModel.delete(id)
+        const tags = await tagsModel.delete(id)
         return res.json({
             success: true,
             message: 'success',
-            result: user[0]
+            result: tags[0]
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'user not found'
+            message: 'tags not found (update or delete on table "tags" violates foreign key constraint "orderDetails_tagsId_fkey" on table "orderDetails")'
         })
     }
 }
