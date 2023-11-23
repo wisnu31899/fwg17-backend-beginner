@@ -32,7 +32,7 @@ exports.createMessage = async (req, res) => {
         return res.json({
             success: true,
             message: 'create message success',
-            result: message[0]
+            result: message
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -57,7 +57,7 @@ exports.updateMessage = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: message[0]
+            result: message
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteMessage = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: message[0]
+            result: message
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'message not found (update or delete on table "message" violates foreign key constraint "orderDetails_messageId_fkey" on table "orderDetails")'
+            message: 'message not found'
         })
     }
 }

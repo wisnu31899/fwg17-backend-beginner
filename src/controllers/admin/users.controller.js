@@ -1,4 +1,5 @@
 let userModel = require('../../models/users.model')
+const argon = require('argon2')
 
 exports.getallusers = async (req, res) => {
     const users = await userModel.findAll()
@@ -26,9 +27,21 @@ exports.getdetailuser = async (req, res) => {
 }
 
 exports.createusers = async (req, res) => {
-    const data = req.body
     try {
-        const user = await userModel.create(data)
+        const {fullName, email, password, address, picture, phoneNumber, role} = req.body
+        
+        const hashed = await argon.hash(password)
+        
+        const user = await userModel.create({
+            fullName,
+            email,
+            password: hashed,
+            address,
+            picture,
+            phoneNumber,
+            role
+        })
+
         return res.json({
             success: true,
             message: 'create success',
@@ -52,7 +65,11 @@ exports.createusers = async (req, res) => {
 exports.updateusers = async (req, res) => {
     const {id} = req.params
     try {
-        const user = await userModel.update(req.body, id)
+        const {password} = req.body
+        
+        const hashed = await argon.hash(password)
+        
+        const user = await userModel.update({password: hashed}, id)
         return res.json({
             success: true,
             message: 'update success',

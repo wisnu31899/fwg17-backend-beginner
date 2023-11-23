@@ -32,13 +32,13 @@ exports.createProductSize = async (req, res) => {
         return res.json({
             success: true,
             message: 'create productSize success',
-            result: productSize[0]
+            result: productSize
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updateProductSize = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: productSize[0]
+            result: productSize
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteProductSize = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: productSize[0]
+            result: productSize
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'productSize not found (update or delete on table "productSize" violates foreign key constraint "orderDetails_productSizeId_fkey" on table "orderDetails")'
+            message: 'productSize not found'
         })
     }
 }

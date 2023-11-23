@@ -32,13 +32,13 @@ exports.createOrder = async (req, res) => {
         return res.json({
             success: true,
             message: 'create order success',
-            result: order[0]
+            result: order
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updateOrder = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: order[0]
+            result: order
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteOrder = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: order[0]
+            result: order
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'order not found (update or delete on table "order" violates foreign key constraint "orderDetails_orderId_fkey" on table "orderDetails")'
+            message: 'order not found'
         })
     }
 }

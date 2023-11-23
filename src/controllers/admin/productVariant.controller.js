@@ -32,13 +32,13 @@ exports.createProductVariant = async (req, res) => {
         return res.json({
             success: true,
             message: 'create productVariant success',
-            result: productVariant[0]
+            result: productVariant
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updateProductVariant = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: productVariant[0]
+            result: productVariant
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteProductVariant = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: productVariant[0]
+            result: productVariant
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'productVariant not found (update or delete on table "productvariant" violates foreign key constraint "orderDetails_productvariantId_fkey" on table "orderDetails")'
+            message: 'productVariant not found'
         })
     }
 }

@@ -32,7 +32,7 @@ exports.createOrderDetails = async (req, res) => {
         return res.json({
             success: true,
             message: 'create orderdetails success',
-            result: orderDetails[0]
+            result: orderDetails
         })
     } catch (err) {
         if (err.code === '23502') {
@@ -57,7 +57,7 @@ exports.updateOrderDetails = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: orderDetails[0]
+            result: orderDetails
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteOrderDetails = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: orderDetails[0]
+            result: orderDetails
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'orderdetails not found (update or delete on table "orderdetails" violates foreign key constraint "orderDetails_orderdetailsId_fkey" on table "orderDetails")'
+            message: 'orderdetails not found'
         })
     }
 }

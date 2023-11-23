@@ -32,13 +32,13 @@ exports.createTags = async (req, res) => {
         return res.json({
             success: true,
             message: 'create tags success',
-            result: tags[0]
+            result: tags
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updateTags = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: tags[0]
+            result: tags
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteTags = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: tags[0]
+            result: tags
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'tags not found (update or delete on table "tags" violates foreign key constraint "orderDetails_tagsId_fkey" on table "orderDetails")'
+            message: 'tags not found'
         })
     }
 }

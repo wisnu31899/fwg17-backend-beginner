@@ -1,15 +1,16 @@
 const db = require('../lib/db.lib')
 
 exports.findAll = async ()=> {
-    const sql = 'SELECT * FROM users'
+    const sql = `SELECT * FROM users
+        ORDER BY "id" ASC`
     const values = []
     const{rows} = await db.query(sql, values)
     return rows
 }
 
-exports.findOne = async (email)=> {
+exports.findOne = async (id)=> {
     const sql = `SELECT * FROM users WHERE "id" = $1`
-    const values = [email]
+    const values = [id]
     const{rows} = await db.query(sql, values)
     return rows
 }
@@ -34,10 +35,10 @@ exports.create = async (data)=> {
 
 exports.update = async (data, id)=> {
     const sql = `UPDATE "users" 
-    SET "fullName" = $1
+    SET "password" = $1
     WHERE "id" = $2
     RETURNING *`
-    const values = [data.fullName,id]
+    const values = [data.password,id]
     const{rows} = await db.query(sql, values)
     return rows[0]
 }

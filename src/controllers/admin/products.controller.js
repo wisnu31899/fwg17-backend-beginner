@@ -1,36 +1,14 @@
 let productModel = require('../../models/products.model')
 
-exports.getallproducts = async (req, res) => {
-    const products = await productModel.findAll()
+exports.getAllProducts  = async (req, res) => {
+    const {searching, sortBy, orderBy, page} = req.query
+    const products = await productModel.findByName(searching, sortBy, orderBy, page)
     return res.json({
         success: true,
-        message: 'list all products',
-        result: products
+        message: 'list all product',
+        results: products
     })
 }
-
-// //name price pagination
-// exports.getallproducts  = async (req, res) => {
-//     const {search, sortBy, orderBy, page} = req.query
-//     const product = await productModel.findAll(search, sortBy, orderBy, page)
-//     return res.json({
-//         success: true,
-//         message: 'list all product',
-//         results: product
-//     })
-// }
-
-// //categories pagination
-// exports.getallproducts  = async (req, res) => {
-//     const {page} = req.query
-//     const product = await productModel.findAll(page)
-//     return res.json({
-//         success: true,
-//         message: 'list all product',
-//         results: product
-//     })
-// }
-
 
 exports.getdetailproduct = async (req, res) => {
     const id = parseInt(req.params.id)

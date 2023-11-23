@@ -32,13 +32,13 @@ exports.createProductTags = async (req, res) => {
         return res.json({
             success: true,
             message: 'create producttags success',
-            result: productTags[0]
+            result: productTags
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updateProductTags = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: productTags[0]
+            result: productTags
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,7 +74,7 @@ exports.deleteProductTags = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: productTags[0]
+            result: productTags
         })
     } catch (err) {
         return res.status(404).json({

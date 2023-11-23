@@ -32,13 +32,13 @@ exports.createCategories = async (req, res) => {
         return res.json({
             success: true,
             message: 'create categories success',
-            result: categories[0]
+            result: categories
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updateCategories = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: categories[0]
+            result: categories
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deleteCategories = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: categories[0]
+            result: categories
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'categories not found (update or delete on table "categories" violates foreign key constraint "orderDetails_categoriesId_fkey" on table "orderDetails")'
+            message: 'categories not found'
         })
     }
 }

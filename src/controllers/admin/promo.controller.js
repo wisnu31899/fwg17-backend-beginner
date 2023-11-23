@@ -32,13 +32,13 @@ exports.createPromo = async (req, res) => {
         return res.json({
             success: true,
             message: 'create promo success',
-            result: promo[0]
+            result: promo
         })
     } catch (err) {
         if (err.code === '23502') {
             return res.status(400).json({
                 success: false,
-                message: `${err.column} cannot be empty`
+                message: `data cannot be empty`
             })
         }
         console.log(err)
@@ -57,7 +57,7 @@ exports.updatePromo = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: promo[0]
+            result: promo
         })
     } catch (err) {
         return res.status(404).json({
@@ -74,12 +74,12 @@ exports.deletePromo = async (req, res) => {
         return res.json({
             success: true,
             message: 'success',
-            result: promo[0]
+            result: promo
         })
     } catch (err) {
         return res.status(404).json({
             success: false,
-            message: 'promo not found (update or delete on table "promo" violates foreign key constraint "orderDetails_promoId_fkey" on table "orderDetails")'
+            message: 'promo not found'
         })
     }
 }
