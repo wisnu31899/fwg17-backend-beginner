@@ -28,20 +28,22 @@ exports.getdetailuser = async (req, res) => {
 
 exports.createusers = async (req, res) => {
     try {
-        const {fullName, email, password, address, picture, phoneNumber, role} = req.body
-        
-        const hashed = await argon.hash(password)
-        
-        const user = await userModel.create({
-            fullName,
-            email,
-            password: hashed,
-            address,
-            picture,
-            phoneNumber,
-            role
-        })
+        // const {fullName, email, password, address, picture, phoneNumber, role} = req.body
+        // const hashed = await argon.hash(password)
+        // const user = await userModel.create({
+        //     fullName,
+        //     email,
+        //     password: hashed,
+        //     address,
+        //     picture,
+        //     phoneNumber,
+        //     role
+        // })
 
+        if(req.body.password){
+            req.body.password = await argon.hash(req.body.password)
+        }
+        const user = await userModel.create(req.body)
         return res.json({
             success: true,
             message: 'create success',
@@ -63,13 +65,20 @@ exports.createusers = async (req, res) => {
 }
 
 exports.updateusers = async (req, res) => {
-    const {id} = req.params
     try {
-        const {password} = req.body
-        
-        const hashed = await argon.hash(password)
-        
-        const user = await userModel.update({password: hashed}, id)
+        // const {id} = req.params
+        // const {password} = req.body
+        // const hashed = await argon.hash(password)
+        // const user = await userModel.update({password: hashed}, id)
+
+        const{id} = req.params
+        const data = {
+            ...req.body
+        }
+        if(req.body.password){
+            data.password = await argon.hash(req.body.password)
+        }
+        const user = await userModel.update(data, id) 
         return res.json({
             success: true,
             message: 'update success',

@@ -34,11 +34,25 @@ exports.create = async (data)=> {
 }
 
 exports.update = async (data, id)=> {
-    const sql = `UPDATE "users" 
-    SET "password" = $1
-    WHERE "id" = $2
-    RETURNING *`
-    const values = [data.password,id]
+    // const sql = `UPDATE "users" 
+    // SET "password" = $1
+    // WHERE "id" = $2
+    // RETURNING *`
+    // const values = [data.password,id]
+    // const{rows} = await db.query(sql, values)
+    // return rows[0]
+
+    const key = []
+    const values = []
+    values.push(parseInt(id))
+    for(let item in data){
+        values.push(data[item])
+        key.push(`"${item}"=$${values.length}`)
+    }
+    const sql = `UPDATE "users"
+    SET ${key.join(', ')}, "updated_At" = now() 
+    WHERE id = $1
+    RETURNING*`
     const{rows} = await db.query(sql, values)
     return rows[0]
 }
