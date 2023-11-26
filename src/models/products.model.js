@@ -37,12 +37,12 @@ exports.create = async (data)=> {
     return rows[0]
 }
 
-exports.update = async (data, id)=> {
+exports.update = async (id, data)=> {
     // const sql = `UPDATE "products" 
-    // SET "name" = $1
+    // SET "image" = $1
     // WHERE "id" = $2
     // RETURNING *`
-    // const values = [data.name,id]
+    // const values = [data.image,id]
     // const{rows} = await db.query(sql, values)
     // return rows[0]
 

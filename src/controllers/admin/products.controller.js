@@ -51,13 +51,13 @@ exports.createproducts = async (req, res) => {
 }
 
 exports.updateproducts = async (req, res) => {
-    const {id} = req.params
+    const id = (req.params.id)
     try {
+        
         if(req.file){
-            req.body.image = req.file.filename
+            req.body.image = (req.file.filename)
         }
-
-        const product = await productModel.update(req.body, id)
+        const product = await productModel.update(id, req.body)
         return res.json({
             success: true,
             message: 'update success',

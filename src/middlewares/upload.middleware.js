@@ -6,19 +6,28 @@ const storage = (dest, filename) => multer.diskStorage ({
         cb(null, path.join('uploads',dest))
     },
     filename: (req, file, cb) =>{
-        const extension = {
-            'image/jpeg ': '.jpg'
+
+        //JIKA MENGGUNAKAN NAMA DARI ID USERS
+        const exstensi = {
+            'image/jpeg' : '.jpg',
+            'image/png' : '.png',
         }
         if(!filename){
             filename = req.params.id
         }
-        cb(null, `${filename}${extension[file.mimetype]}`)
+
+        cb(null, `${filename}${exstensi[file.mimetype]}`)
+
+        //JIKA MENGGUNAKAN NAMA ASLI DARI FILE
+        // console.log(file)
+        // cb(null, file.originalname)
     }
 })
 
 const uploadMiddleware = (type, file) =>{
     const processUpload = multer ({
-        storage: storage(type, file)
+        storage: storage(type, file),
+        limits: {fileSize: 1*1024*1024}
     })
     return processUpload
 }
