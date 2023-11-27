@@ -1,7 +1,8 @@
 const multer = require('multer')
 const path = require('path')
 
-const storage = (dest, filename) => multer.diskStorage ({
+const storage = (dest, filename, filefilter) => multer.diskStorage ({
+
     destination: (req, file, cb) =>{
         cb(null, path.join('uploads',dest))
     },
@@ -21,6 +22,16 @@ const storage = (dest, filename) => multer.diskStorage ({
         //JIKA MENGGUNAKAN NAMA ASLI DARI FILE
         // console.log(file)
         // cb(null, file.originalname)
+    },
+    filefilter: (req, file, cb)=>{
+        const filtermimetype = ['image/jpeg','image/gif','image/bmp','image/webp','image/svg']
+        // const filefilter = filtermimetype.filter(filtermimetype=>filtermimetype)
+        console.log(file.mimetype)
+    if(filtermimetype.includes(file.mimetype)){
+        cb(null, true)
+    }else{
+        cb(new Error('file type not allow'), false)
+    }
     }
 })
 
