@@ -1,22 +1,32 @@
 const db = require('../lib/db.lib')
 
-exports.findByName = async (keyword='', sortBy, orderBy, pages = 1)=> {
-    const sort = ['id', 'created_At', 'basePrice', 'categoriesName']
+exports.findAll = async (keyword='', sortBy, orderBy, page = 1, limit)=> {
+    const sort = ['idProduct', 'created_At', 'name','basePrice', 'categoriesName']
     const order = ['asc', 'desc']
-    const limit = 10
-    const offset = (pages - 1) * limit
+    const limitData = limit
+    const offset = (page - 1) * limitData
     sortBy = sort.includes(sortBy)? sortBy : 'id'
     orderBy = order.includes(orderBy)? orderBy : 'asc'
-    const sql = `SELECT "products"."name" "productName", "basePrice", image, "categories"."name" "categoriesName"
+    const sql = `SELECT "products"."name" AS "productName","products"."id" "idProduct","image", "basePrice", "categories"."name" AS "categoriesName"
     FROM "products"
-    JOIN "productCategories" ON "productCategories"."productId" = "products"."id"
-    JOIN "categories" ON "productCategories"."categoryId" = "categories"."id"
-    WHERE "products"."name" ILIKE $1 
+    FULL JOIN "productCategories" ON "productCategories"."productId" = "products"."id"
+    FULL JOIN "categories" ON "productCategories"."categoryId" = "categories"."id"
+    WHERE  "products"."name" ILIKE $1
     ORDER BY "${sortBy}" ${orderBy}
-    LIMIT ${limit} OFFSET ${offset}`
+    LIMIT ${limitData} OFFSET ${offset}`
     const values = [`%${keyword}%`]
     const{rows} = await db.query(sql, values)
     return rows
+}
+
+
+exports.countAll = async (keyword='')=>{
+    const sql = `SELECT COUNT("id")
+    FROM "products"
+    WHERE "name" ILIKE $1`
+    const values = [`%${keyword}%`]
+    const{rows} = await db.query(sql, values)
+    return parseInt(rows[0].count)//BANYAKNYA DATA YANG DISIMPAN
 }
 
 exports.findOne = async (id)=> {
@@ -38,6 +48,7 @@ exports.create = async (data)=> {
 }
 
 exports.update = async (id, data)=> {
+    // //MANUAL 1 PER 1
     // const sql = `UPDATE "products" 
     // SET "image" = $1
     // WHERE "id" = $2

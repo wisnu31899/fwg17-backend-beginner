@@ -1,44 +1,54 @@
 const multer = require('multer')
 const path = require('path')
+// const {v4: uuidv4} = require('uuid')//DOWNLOAD DULU
 
-const storage = (dest, filename, filefilter) => multer.diskStorage ({
-
+const storage = (dest, filename) => multer.diskStorage ({
     destination: (req, file, cb) =>{
         cb(null, path.join('uploads',dest))
     },
     filename: (req, file, cb) =>{
-
-        //JIKA MENGGUNAKAN NAMA DARI ID USERS
+        //MENAMBAHKAN .jpg DIBELAKANG NAMA
         const exstensi = {
             'image/jpeg' : '.jpg',
             'image/png' : '.png',
         }
-        if(!filename){
-            filename = req.params.id
-        }
+        // //JIKA MENGGUNAKAN NAMA DARI ID USERS
+        // if(!filename && req.params.id){
+        //     filename = req.params.id
+        // }else if(!filename){
+        //     filename = new Date().getTime()
+        // }
 
+        // //MENGGUNAKAN UUID SEBAGAI NAMA
+        // filename = uuidv4()
+        // cb(null, `${filename}${exstensi[file.mimetype]}`)
+
+        //MENGGUNAKAN WAKTU SEBAGAI NAMA
+        filename = new Date().getTime()
         cb(null, `${filename}${exstensi[file.mimetype]}`)
 
         //JIKA MENGGUNAKAN NAMA ASLI DARI FILE
         // console.log(file)
         // cb(null, file.originalname)
-    },
-    filefilter: (req, file, cb)=>{
-        const filtermimetype = ['image/jpeg','image/gif','image/bmp','image/webp','image/svg']
-        // const filefilter = filtermimetype.filter(filtermimetype=>filtermimetype)
-        console.log(file.mimetype)
-    if(filtermimetype.includes(file.mimetype)){
-        cb(null, true)
-    }else{
-        cb(new Error('file type not allow'), false)
-    }
     }
 })
 
 const uploadMiddleware = (type, file) =>{
     const processUpload = multer ({
         storage: storage(type, file),
-        limits: {fileSize: 1*1024*1024}
+        //MEMBERIKAN BATAS PADA UKURAN GAMBAR
+        limits: {
+            fileSize: 3*1024*1024
+        },
+        //MEMBERIKAN FILTER UNTUK JENIS FILE DAN WAJIB GAMBAR
+        fileFilter: (req, file, cb)=>{
+            const extensi = ['image/jpeg','image/gif','image/bmp','image/webp','image/png']
+            if(!extensi.includes(file.mimetype)){
+                cb(new Error('file_issue'), false)
+            }else{
+                cb(null, true)
+            }
+        }
     })
     return processUpload
 }

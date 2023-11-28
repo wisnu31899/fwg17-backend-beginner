@@ -1,15 +1,53 @@
-let productModel = require('../models/products.model')
+const productModel = require('../models/products.model')
 
-exports.getAllProducts = async (req, res) => {
-    const products = await productModel.findAll()
-    return res.json({
-        success: true,
-        message: 'list all products',
-        result: products
-    })
+exports.getallproducts = async (req, res) => {
+    try {
+        const {search, sortBy, orderBy, page=1, limit } = req.query
+        const limitData = parseInt(limit) || 10
+        const count = await productModel.countAll(search)
+        const products = await productModel.findAll(search, sortBy, orderBy, page, limit)
+        // if(!products.length < 1){
+        //     throw new Error('no_data')
+        // }
+
+        const totalPage = Math.ceil(count / limitData)
+        const nextPage = parseInt(page) + 1
+        const prevPage = parseInt(page) - 1
+        // const products = await productModel.findAll()
+        return res.json({
+            success: true,
+            message: 'list all product',
+            pageInfo: {
+                currentPage: parseInt(page),
+                totalPage,
+                nextPage: nextPage <= totalPage ? nextPage : null,
+                prevPage: prevPage >= 1 ? prevPage : null,
+                totalData: count
+            },
+            results: products
+        })
+    } catch (err) {
+        if (err.message === 'no_data') {
+            return res.status(404).json({
+                success: false,
+                message: 'no data'
+            })
+        }
+        console.log(err)
+        return res.status(500).json({
+            success: false,
+            message: 'internal server error'
+        })
+    }
 }
 
-exports.getDetailProduct = async (req, res) => {
+exports.getdetailproduct = async (req, res) => {
+    // //SINGKAT
+    // return res.json({
+    //     success: true,
+    //     message:'detail product'
+    // })
+
     const id = parseInt(req.params.id)
     const product = await productModel.findOne(id)
     if (!product[0]) {
@@ -21,65 +59,6 @@ exports.getDetailProduct = async (req, res) => {
     return res.json({
         success: true,
         message: 'detail product',
-        result: product[0]
+        results: product[0]
     })
-}
-
-exports.createProducts = async (req, res) => {
-    const data = req.body
-    try {
-        const product = await productModel.create(data)
-        return res.json({
-            success: true,
-            message: 'create product success',
-            result: product[0]
-        })
-    } catch (err) {
-        if (err.code === '23502') {
-            return res.status(400).json({
-                success: false,
-                message: `${err.column} cannot be empty`
-            })
-        }
-        console.log(err)
-        return res.status(500).json({
-            success: false,
-            message: 'internal server error'
-        })
-    }
-}
-
-exports.updateProducts = async (req, res) => {
-    const id = parseInt(req.params.id)
-    const data = req.body
-    try {
-        const product = await productModel.update(data, id)
-        return res.json({
-            success: true,
-            message: 'success',
-            result: product[0]
-        })
-    } catch (err) {
-        return res.status(404).json({
-            success: false,
-            message: 'product not found'
-        })
-    }
-}
-
-exports.deleteProducts = async (req, res) => {
-    const id = parseInt(req.params.id)
-    try {
-        const product = await productModel.delete(id)
-        return res.json({
-            success: true,
-            message: 'success',
-            result: product[0]
-        })
-    } catch (err) {
-        return res.status(404).json({
-            success: false,
-            message: 'product not found'
-        })
-    }
 }
