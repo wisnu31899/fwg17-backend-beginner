@@ -94,10 +94,12 @@ exports.register = async (req, res)=>{
             message: 'register success'
         })
     }catch(err){
-        console.log(err)
+        console.error(err)
+        
         return res.status(500).json({
             success: false,
-            message: 'internal server error'
+            message: 'registration failed',
+            error: err.message
         })
     }
 }

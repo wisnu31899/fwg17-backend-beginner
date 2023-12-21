@@ -23,14 +23,20 @@ exports.findOneByEmail = async (email)=> {
 }
 
 exports.create = async (data)=> {
-    const sql = `INSERT INTO "users"
+    try{
+        const sql = `INSERT INTO "users"
     ("fullName","email","password","address","picture","phoneNumber","role")
     VALUES
     ($1,$2,$3,$4,$5,$6,$7)
     RETURNING *`
     const values = [data.fullName, data.email, data.password, data.address, data.picture, data.phoneNumber, data.role]
     const{rows} = await db.query(sql, values)
+    console.log({rows})
     return rows[0]
+    }catch(err){
+        console.log('Error in create function:', err)
+        throw err
+    }
 }
 
 exports.update = async (data, id)=> {
