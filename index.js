@@ -13,7 +13,7 @@ const app = express()
 app.use(express.urlencoded({extended: false}))
 app.use(morgan('dev'))
 app.use(cors())
-
+app.use('/uploads/products',express.static('uploads/products'))
 app.use('/', require('./src/routers'))
 
 app.get('/', (req, res) =>{
