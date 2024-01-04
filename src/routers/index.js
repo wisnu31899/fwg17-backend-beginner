@@ -11,4 +11,6 @@ router.use('/admin',authMiddleware, roleCheckMiddleware('admin'), require('./adm
 
 router.use('/customer',authMiddleware, roleCheckMiddleware('customer'), require('./costumer'))
 
+router.use('/profile',authMiddleware, require('./profile.router'))
+
 module.exports = router

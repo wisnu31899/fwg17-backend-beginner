@@ -2,10 +2,10 @@ const productModel = require('../models/products.model')
 
 exports.getallproducts = async (req, res) => {
     try {
-        const {search, sortBy, orderBy, page=1, limit } = req.query
-        const limitData = parseInt(limit) || 10
+        const {search, sortBy, orderBy, page=1, limit, bestSeller } = req.query
+        const limitData = parseInt(limit) || 4
         const count = await productModel.countAll(search)
-        const products = await productModel.findAll(search, sortBy, orderBy, page, limit)
+        const products = await productModel.findAll(search, sortBy, orderBy, page, limit, bestSeller)
         // if(!products.length < 1){
         //     throw new Error('no_data')
         // }

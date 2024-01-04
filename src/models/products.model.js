@@ -1,17 +1,17 @@
 const db = require('../lib/db.lib')
 
-exports.findAll = async (keyword='', sortBy, orderBy, page = 1, limit)=> {
+exports.findAll = async (keyword='', sortBy, orderBy, page = 1, limit = 4, bestSeller)=> {
     const sort = ['idProduct', 'created_At', 'name','basePrice', 'categoriesName']
     const order = ['asc', 'desc']
     const limitData = limit
     const offset = (page - 1) * limitData
-    sortBy = sort.includes(sortBy)? sortBy : 'id'
+    sortBy = sort.includes(sortBy)? sortBy : 'idProduct'
     orderBy = order.includes(orderBy)? orderBy : 'asc'
-    const sql = `SELECT "products"."name" AS "productName","products"."id" "idProduct","image", "basePrice", "categories"."name" AS "categoriesName"
+    const sql = `SELECT "products"."name" AS "productName","products"."id" "idProduct","image", "basePrice", "description", "isRecommended", "categories"."name" AS "categoriesName"
     FROM "products"
     FULL JOIN "productCategories" ON "productCategories"."productId" = "products"."id"
     FULL JOIN "categories" ON "productCategories"."categoryId" = "categories"."id"
-    WHERE  "products"."name" ILIKE $1
+    WHERE  "products"."name" ILIKE $1 ${bestSeller ? 'AND "isRecommended" = true' : ''}
     ORDER BY "${sortBy}" ${orderBy}
     LIMIT ${limitData} OFFSET ${offset}`
     const values = [`%${keyword}%`]

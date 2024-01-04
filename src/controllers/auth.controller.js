@@ -43,7 +43,7 @@ exports.login = async (req, res)=>{
         const token = jwt.sign(payload, process.env.APP_SECRET || 'secretkey')
         return res.json({
             success: true,
-            message: 'login success',
+            message: 'login success, welcome to coffee shop app',
             results: {
                 token
             }
@@ -82,7 +82,7 @@ exports.register = async (req, res)=>{
         
         const hashed = await argon.hash(password)
         
-        const user =  userModel.create({
+        const user = await userModel.registrasi({
             fullName,
             email,
             password: hashed,
@@ -91,15 +91,19 @@ exports.register = async (req, res)=>{
         })
         return res.json({
             success: true,
-            message: 'register success'
+            message: 'register success, welcome to coffee shop app'
         })
-    }catch(err){
-        console.error(err)
-        
+    }catch (err) {
+        if (err.code === '23505') {
+            return res.status(400).json({
+                success: false,
+                message: `email is already in use`
+            })
+        }
+        console.log(err)
         return res.status(500).json({
             success: false,
-            message: 'registration failed',
-            error: err.message
+            message: 'internal server error'
         })
     }
 }

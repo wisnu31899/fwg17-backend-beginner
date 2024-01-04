@@ -2,15 +2,16 @@ const productModel = require('../../models/products.model')
 const fs = require('fs/promises')
 const path = require('path')
 const uploadMiddleware = require('../../middlewares/upload.middleware')
+const errorHandlerImg = require('../../lib/errorHandlerImg.lib')
 const upload = uploadMiddleware('products').single('image')
 
 exports.getallproducts = async (req, res) => {
     try {
-        const {search, sortBy, orderBy, page=1, limit } = req.query
+        const {search, sortBy, orderBy, page=1, limit, bestSeller } = req.query
 
-        const limitData = parseInt(limit) || 10
+        const limitData = parseInt(limit) || 4
         const count = await productModel.countAll(search)
-        const products = await productModel.findAll(search, sortBy, orderBy, page, limit)
+        const products = await productModel.findAll(search, sortBy, orderBy, page, limit, bestSeller)
 
         // if(!products.length < 1){
         //     throw new Error('no_data')
@@ -111,25 +112,7 @@ exports.createproduct = async (req, res) => {
                 results: product
             })
         } catch (err) {
-            //ERROR UNTUK limits
-            if (err.message === 'File too large') {
-                return res.status(400).json({
-                    success: false,
-                    message: err.message
-                })
-            }
-            //ERROR UNTUK file Filter
-            if (err.message === 'file_issue') {
-                return res.status(400).json({
-                    success: false,
-                    message: 'File not support'
-                })
-            }
-            console.log(err)
-            return res.status(500).json({
-                success: false,
-                message: 'internal server error'
-            })
+            errorHandlerImg(err, res)
         }
     })
 }
@@ -150,7 +133,10 @@ exports.updateproduct = async (req, res) => {
             if(req.file) {
                 if (data.image) {
                     const uploadLocation = path.join(global.path, 'uploads', 'products', data.image)
-                    await fs.rm(uploadLocation)
+                    fs.access(uploadLocation, fs.constants.R_OK)
+                    .then(() => {
+                        fs.rm(uploadLocation)
+                    }).catch(()=>{})
                 }
                 req.body.image = req.file.filename
             }
@@ -161,23 +147,7 @@ exports.updateproduct = async (req, res) => {
                 results: product
             })
         } catch (err) {
-            if (err.message === "not found") {
-                return res.status(404).json({
-                    success: false,
-                    message: 'product not found'
-                })
-            }
-            if (err.message === 'file_issue') {
-                return res.status(400).json({
-                    success: false,
-                    message: 'File not support'
-                })
-            }
-            console.log(err)
-            return res.status(500).json({
-                success: false,
-                message: 'internet server error'
-            })
+            errorHandlerImg(err, res)
         }
     })
 }
@@ -188,7 +158,10 @@ exports.deleteproduct = async (req, res) => {
         const deleted = await productModel.delete(id)
         if (deleted.image) {
             const uploadLocation = path.join(global.path, 'uploads', 'products', deleted.image)
-            fs.rm(uploadLocation)
+            fs.access(uploadLocation, fs.constants.R_OK)
+            .then(() => {
+                fs.rm(uploadLocation)
+            }).catch(()=>{})
         }
         return res.json({
             success: true,
