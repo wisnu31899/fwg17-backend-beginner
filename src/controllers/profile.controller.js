@@ -5,6 +5,7 @@ const upload = uploadMiddleware('profile').single('picture')
 const fs = require('fs/promises')
 const path = require('path')
 
+
 exports.getProfile = async (req, res) => {
     const {id} = req.user
     const user = await userModel.findOne(id)
@@ -27,6 +28,7 @@ exports.updateProfile = async (req, res) => {
             }
             const {id} = req.user
             if(req.file){
+
                 const user = await userModel.findOne(id)
                 if(user.picture){
                     const savePicture = path.join(global.path, 'uploads', 'profile', data.picture)
