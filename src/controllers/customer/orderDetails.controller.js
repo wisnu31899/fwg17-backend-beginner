@@ -29,7 +29,7 @@ exports.getOrderDetails = async (req, res) => {
 exports.getOrderDetailsByOrderId = async (req, res) => {
     const orderId = parseInt(req.params.id)
     const orderDetails = await orderdetailsModel.findOnebyOrderId(orderId)
-    if (!orderDetails[0]) {
+    if (!orderDetails) {
         return res.status(404).json({
             success: false,
             message: 'orderdetails not found'
@@ -38,7 +38,7 @@ exports.getOrderDetailsByOrderId = async (req, res) => {
     return res.json({
         success: true,
         message: 'detail orderdetails',
-        result: orderDetails[0]
+        result: orderDetails
     })
 }
 
