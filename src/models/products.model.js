@@ -17,12 +17,7 @@ exports.findAll = async (keyword = '', sortBy, orderBy, page = 1, limit = 4, cat
     if (category) {
         sql += ` AND "categories"."name" = $2`;
     }
-
-    // Tambahkan kriteria pencarian untuk bestSeller
-    if (bestSeller) {
-        sql += ` AND "isRecommended" = true`;
-    }
-
+    
     sql += ` ORDER BY "${sortBy}" ${orderBy}
              LIMIT ${limitData} OFFSET ${offset}`;
 

@@ -2,10 +2,10 @@ const productModel = require('../models/products.model')
 
 exports.getallproducts = async (req, res) => {
     try {
-        const { search, sortBy, orderBy, page = 1, limit, bestSeller, category } = req.query;
+        const { search, sortBy, orderBy, page = 1, limit, category } = req.query;
         const limitData = parseInt(limit) || 4;
         const count = await productModel.countAll(search);
-        const products = await productModel.findAll(search, sortBy, orderBy, page, limit, bestSeller, category);
+        const products = await productModel.findAll(search, sortBy, orderBy, page, limit, category);
 
         const totalPage = Math.ceil(count / limitData);
         const nextPage = parseInt(page) + 1;
