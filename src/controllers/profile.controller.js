@@ -1,4 +1,5 @@
 const userModel = require('../models/users.model')
+const  { v2: cloudinary } = require ("cloudinary");
 const uploadMiddleware = require('../middlewares/upload.middleware')
 const errorHandlerImg = require('../lib/errorHandlerImg.lib')
 const upload = uploadMiddleware('profile').single('picture')
@@ -36,13 +37,34 @@ exports.updateProfile = async (req, res) => {
 
                 const user = await userModel.findOneUser(id)
                 if(user.picture){
-                    const savePicture = path.join(global.path, 'uploads', 'profile', data.picture)
+                    const savePicture = path.join(global.path, 'uploads', 'profile', user.picture)
                     fs.access(savePicture, fs.constants.R_OK)
                     .then(() => {
                         fs.rm(savePicture)
                     }).catch(()=>{})
                 }
                 req.body.picture = req.file.filename
+
+                // if(user.picture){
+                //     cloudinary.search
+                //     .expression(`${encodeURIComponent(user.picture)}`)
+                //     .max_results(1)
+                //     .execute()
+                //     .then(result => {
+                //         cloudinary.uploader.destroy(result.resources[0].public_id)
+                //         .then(result => console.log({...result, message: "delete picture success"}))
+                //         .catch(err => {
+                //             return errorHandler(err, res)
+                //         })
+                //     }).catch(err => {
+                //         return errorHandler(err, res)
+                //     })
+                // }
+                
+    
+                console.log(req.file)
+                // req.body.picture = req.file.filename
+                req.body.picture = req.file.path
             }
             const user = await userModel.update(parseInt(id), req.body)
             if(user.password){

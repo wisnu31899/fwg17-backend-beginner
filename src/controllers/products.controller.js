@@ -2,18 +2,15 @@ const productModel = require('../models/products.model')
 
 exports.getallproducts = async (req, res) => {
     try {
-        const {search, sortBy, orderBy, page=1, limit, bestSeller } = req.query
-        const limitData = parseInt(limit) || 4
-        const count = await productModel.countAll(search)
-        const products = await productModel.findAll(search, sortBy, orderBy, page, limit, bestSeller)
-        // if(!products.length < 1){
-        //     throw new Error('no_data')
-        // }
+        const { search, sortBy, orderBy, page = 1, limit, bestSeller, category } = req.query;
+        const limitData = parseInt(limit) || 4;
+        const count = await productModel.countAll(search);
+        const products = await productModel.findAll(search, sortBy, orderBy, page, limit, bestSeller, category);
 
-        const totalPage = Math.ceil(count / limitData)
-        const nextPage = parseInt(page) + 1
-        const prevPage = parseInt(page) - 1
-        // const products = await productModel.findAll()
+        const totalPage = Math.ceil(count / limitData);
+        const nextPage = parseInt(page) + 1;
+        const prevPage = parseInt(page) - 1;
+
         return res.json({
             success: true,
             message: 'list all product',

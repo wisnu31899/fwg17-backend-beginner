@@ -1,5 +1,7 @@
 const multer = require('multer')
 const path = require('path')
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
+const  { v2: cloudinary } = require ("cloudinary");
 const {v4: uuidv4} = require('uuid')//DOWNLOAD DULU
 
 const storage = (dest, filename) => multer.diskStorage ({
@@ -32,6 +34,31 @@ const storage = (dest, filename) => multer.diskStorage ({
         // cb(null, file.originalname)
     }
 })
+
+
+// //pakai cloudinary
+// cloudinary.config({
+//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+//     api_key: process.env.CLOUDINARY_API_KEY, 
+//     api_secret: process.env.CLOUDINARY_API_SECRET
+// })
+
+// const storage = (dest) => new CloudinaryStorage({
+//     cloudinary,
+//     params: async (req, file) =>  {
+
+//         const extension = {
+//           "image/jpeg": "jpg",
+//           "image/png": "png",
+//         }
+
+//         return {
+//             folder: `js-coffee-shop/${dest}`,
+//             format: extension[file.mimetype],
+//             public_id: uuidv4()
+//         }
+//     }
+// })
 
 const uploadMiddleware = (type, file) =>{
     const processUpload = multer ({

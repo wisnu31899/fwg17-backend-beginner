@@ -1,22 +1,38 @@
 const db = require('../lib/db.lib')
 
-exports.findAll = async (keyword='', sortBy, orderBy, page = 1, limit = 4, bestSeller)=> {
-    const sort = ['idProduct', 'createdAt', 'name','basePrice', 'categoriesName']
-    const order = ['asc', 'desc']
-    const limitData = limit
-    const offset = (page - 1) * limitData
-    sortBy = sort.includes(sortBy)? sortBy : 'idProduct'
-    orderBy = order.includes(orderBy)? orderBy : 'asc'
-    const sql = `SELECT "products"."name" AS "productName","products"."id" "idProduct","image", "basePrice", "description", "isRecommended", "categories"."name" AS "categoriesName"
-    FROM "products"
-    FULL JOIN "productCategories" ON "productCategories"."productId" = "products"."id"
-    FULL JOIN "categories" ON "productCategories"."categoryId" = "categories"."id"
-    WHERE  "products"."name" ILIKE $1 ${bestSeller ? 'AND "isRecommended" = true' : ''}
-    ORDER BY "${sortBy}" ${orderBy}
-    LIMIT ${limitData} OFFSET ${offset}`
-    const values = [`%${keyword}%`]
-    const{rows} = await db.query(sql, values)
-    return rows
+exports.findAll = async (keyword = '', sortBy, orderBy, page = 1, limit = 4, category) => {
+    const sort = ['idProduct', 'createdAt', 'name', 'basePrice', 'categoriesName'];
+    const order = ['asc', 'desc'];
+    const limitData = limit;
+    const offset = (page - 1) * limitData;
+    sortBy = sort.includes(sortBy) ? sortBy : 'idProduct';
+    orderBy = order.includes(orderBy) ? orderBy : 'asc';
+    let sql = `SELECT "products"."name" AS "productName", "products"."id" AS "idProduct", "image", "basePrice", "description", "isRecommended", "categories"."name" AS "categoriesName"
+               FROM "products"
+               FULL JOIN "productCategories" ON "productCategories"."productId" = "products"."id"
+               FULL JOIN "categories" ON "productCategories"."categoryId" = "categories"."id"
+               WHERE "products"."name" ILIKE $1`;
+
+    // Tambahkan kriteria pencarian berdasarkan kategori
+    if (category) {
+        sql += ` AND "categories"."name" = $2`;
+    }
+
+    // Tambahkan kriteria pencarian untuk bestSeller
+    if (bestSeller) {
+        sql += ` AND "isRecommended" = true`;
+    }
+
+    sql += ` ORDER BY "${sortBy}" ${orderBy}
+             LIMIT ${limitData} OFFSET ${offset}`;
+
+    const values = [`%${keyword}%`];
+    if (category) {
+        values.push(category);
+    }
+
+    const { rows } = await db.query(sql, values);
+    return rows;
 }
 
 
