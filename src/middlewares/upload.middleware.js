@@ -1,7 +1,7 @@
 const multer = require('multer')
 const path = require('path')
-const { CloudinaryStorage } = require('multer-storage-cloudinary')
-const  { v2: cloudinary } = require ("cloudinary");
+// const { CloudinaryStorage } = require('multer-storage-cloudinary')
+// const  { v2: cloudinary } = require ("cloudinary");
 const {v4: uuidv4} = require('uuid')//DOWNLOAD DULU
 
 const storage = (dest, filename) => multer.diskStorage ({

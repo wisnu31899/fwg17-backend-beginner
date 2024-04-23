@@ -1,5 +1,5 @@
 const userModel = require('../models/users.model')
-const  { v2: cloudinary } = require ("cloudinary");
+// const  { v2: cloudinary } = require ("cloudinary");
 const uploadMiddleware = require('../middlewares/upload.middleware')
 const errorHandlerImg = require('../lib/errorHandlerImg.lib')
 const upload = uploadMiddleware('profile').single('picture')
