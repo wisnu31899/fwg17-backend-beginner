@@ -5,9 +5,10 @@ const path = require('path')
 const {v4: uuidv4} = require('uuid')//DOWNLOAD DULU
 
 const storage = (dest, filename) => multer.diskStorage ({
-    destination: (req, file, cb) =>{
-        cb(null, path.join('uploads',dest))
-    },
+    //digunakan tanpa cloudinary
+    // destination: (req, file, cb) =>{
+    //     cb(null, path.join('uploads',dest))
+    // },
     filename: (req, file, cb) =>{
         //MENAMBAHKAN .jpg DIBELAKANG NAMA
         const exstensi = {
@@ -34,31 +35,6 @@ const storage = (dest, filename) => multer.diskStorage ({
         // cb(null, file.originalname)
     }
 })
-
-
-// //pakai cloudinary
-// cloudinary.config({
-//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-//     api_key: process.env.CLOUDINARY_API_KEY, 
-//     api_secret: process.env.CLOUDINARY_API_SECRET
-// })
-
-// const storage = (dest) => new CloudinaryStorage({
-//     cloudinary,
-//     params: async (req, file) =>  {
-
-//         const extension = {
-//           "image/jpeg": "jpg",
-//           "image/png": "png",
-//         }
-
-//         return {
-//             folder: `js-coffee-shop/${dest}`,
-//             format: extension[file.mimetype],
-//             public_id: uuidv4()
-//         }
-//     }
-// })
 
 const uploadMiddleware = (type, file) =>{
     const processUpload = multer ({
